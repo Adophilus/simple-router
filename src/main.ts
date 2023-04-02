@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   router.onChange(async () => {
-    const outlet = await router.outlet()
+    const outlet = router.outlet()
     if (outletContainer)
       outletContainer.innerHTML = outlet
   })

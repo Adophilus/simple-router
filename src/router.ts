@@ -1,7 +1,7 @@
 export type Route = {
   name: string;
   path: string | RegExp;
-  render: () => Promise<any>;
+  render: () => any;
   enter?: () => Promise<any>;
 };
 
@@ -77,7 +77,7 @@ class Router {
     window.history.back();
   }
 
-  async outlet() {
+  outlet() {
     return this.currentRoute?.render() ?? ""
   }
 }
