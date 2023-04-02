@@ -1,8 +1,8 @@
 export type Route = {
   name: string;
   path: string | RegExp;
-  render: () => void;
-  enter?: () => void;
+  render: () => Promise<string>;
+  enter?: () => Promise<void>;
 };
 
 type OnChangeCallback = (route: Route) => void
@@ -11,10 +11,13 @@ class Router {
   routes: Route[] = []
   onChangeCallbacks: OnChangeCallback[] = []
   declare private currentRoute: Route
+  enteredComponents: string[] = []
 
   constructor(routes: Route[] = []) {
     routes.forEach((route) => this.register(route));
+  }
 
+  init() {
     window.addEventListener("popstate", (event) => {
       console.log(
         `location: ${document.location}, state: ${JSON.stringify(event.state)}`
@@ -46,17 +49,23 @@ class Router {
     return route ? route : null
   }
 
-  private changeRoute(mappedRoute: Route, path: string) {
+  private async changeRoute(mappedRoute: Route, path: string) {
     this.currentRoute = mappedRoute
+
+    if (this.currentRoute.enter && !this.enteredComponents.includes(this.currentRoute.name)) {
+      await this.currentRoute.enter()
+      this.enteredComponents.push(this.currentRoute.name)
+    }
+
     window.history.pushState({}, mappedRoute.name, path);
     this.onChangeCallbacks.forEach(cb => cb(this.currentRoute))
   }
 
-  goto(route: string) {
+  async goto(route: string) {
     const mappedRoute = this.getRoute(route)
 
     if (mappedRoute) {
-      this.changeRoute(mappedRoute, route)
+      await this.changeRoute(mappedRoute, route)
     }
   }
 
@@ -68,7 +77,7 @@ class Router {
     window.history.back();
   }
 
-  get outlet() {
+  async outlet() {
     return this.currentRoute.render()
   }
 }
