@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "lib": "./src/router.ts",
+  "lib": "./src/",
+  "main": "./src/router.ts",
   "scripts": {
     "dev": "vite --port 3000",
     "build:dev": "tsc && vite build",
