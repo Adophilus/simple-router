@@ -1,8 +1,8 @@
 export type Route = {
   name: string;
   path: string | RegExp;
-  render: () => Promise<string>;
-  enter?: () => Promise<void>;
+  render: () => Promise<any>;
+  enter?: () => Promise<any>;
 };
 
 type OnChangeCallback = (route: Route) => void
@@ -78,7 +78,7 @@ class Router {
   }
 
   async outlet() {
-    return this.currentRoute.render()
+    return this.currentRoute?.render() ?? ""
   }
 }
 
