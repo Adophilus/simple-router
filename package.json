@@ -1,11 +1,13 @@
 {
   "name": "simple-router",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "lib": "./src/router.ts",
   "scripts": {
     "dev": "vite --port 3000",
-    "build": "tsc && vite build",
+    "build:dev": "tsc && vite build",
+    "build:lib": "tsc --project tsconfig.lib.json",
     "preview": "vite preview"
   },
   "devDependencies": {
